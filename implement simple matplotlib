@@ -1,0 +1,22 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Step 1: Load your dataset
+data = pd.read_csv('')
+
+# Step 2: Prepare your data for plotting
+x = data['x']
+y = data['y']
+
+# Step 3: Choose the appropriate type of plot
+plt.plot(x, y, label='Data')
+
+# Step 4: Customize the plot as needed
+plt.title('My Data Visualization')
+plt.xlabel('X Axis')
+plt.ylabel('Y Axis')
+plt.legend()
+
+# Step 5: Display the plot
+plt.show()
+

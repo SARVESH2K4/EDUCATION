@@ -1,0 +1,79 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Generate sample time series data
+dates = pd.date_range(start='2024-01-01', periods=100)
+values = np.random.randn(100).cumsum()  # Random walk
+ts_data = pd.Series(values, index=dates)
+
+# Plot the time series data
+plt.figure(figsize=(10, 6))
+plt.plot(ts_data)
+plt.title('Time Series Data')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.grid(True)
+plt.show()
+
+# Decompose time series into trend, seasonal, and residual components
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+decomposition = seasonal_decompose(ts_data)
+trend = decomposition.trend
+seasonal = decomposition.seasonal
+residual = decomposition.resid
+
+# Plot decomposition components
+plt.figure(figsize=(12, 8))
+plt.subplot(411)
+plt.plot(ts_data, label='Original')
+plt.legend(loc='upper left')
+plt.subplot(412)
+plt.plot(trend, label='Trend')
+plt.legend(loc='upper left')
+plt.subplot(413)
+plt.plot(seasonal, label='Seasonal')
+plt.legend(loc='upper left')
+plt.subplot(414)
+plt.plot(residual, label='Residual')
+plt.legend(loc='upper left')
+plt.tight_layout()
+plt.show()
+
+# Plot rolling statistics (mean and standard deviation)
+rolling_mean = ts_data.rolling(window=10).mean()
+rolling_std = ts_data.rolling(window=10).std()
+
+plt.figure(figsize=(10, 6))
+plt.plot(ts_data, color='blue', label='Original')
+plt.plot(rolling_mean, color='red', label='Rolling Mean')
+plt.plot(rolling_std, color='green', label='Rolling Std')
+plt.title('Rolling Mean & Standard Deviation')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.legend()
+plt.show()
+
+# Plot autocorrelation and partial autocorrelation plots
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
+plt.figure(figsize=(12, 6))
+plt.subplot(211)
+plot_acf(ts_data, ax=plt.gca(), lags=30)
+plt.subplot(212)
+plot_pacf(ts_data, ax=plt.gca(), lags=30)
+plt.show()
+
+# Plot seasonal plot using Seaborn
+ts_data_df = ts_data.reset_index()
+ts_data_df.columns = ['Date', 'Value']
+
+plt.figure(figsize=(12, 6))
+sns.lineplot(x='Date', y='Value', data=ts_data_df, ci=None)
+plt.title('Seasonal Plot')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.grid(True)
+plt.show()
